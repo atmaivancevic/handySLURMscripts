@@ -6,6 +6,8 @@
 # Note: requires R and Rscript plotJobStats.R
 
 # Takes two command line arguments as input: process name and partition
+# Note: process name should be the first few unique characters of your process name
+# E.g. "BWA" is fine for BWA-GATKHPC
 # If you aren't sure which partition your jobs ran on, it was probably "cpu"
 # e.g. 
 # $1 = BWA
@@ -14,7 +16,7 @@
 export FASTDIR=/fast/users/$USER
 
 # go to dir that stores all slurm*.out files
-cd $FASTDIR/scripts
+cd $FASTDIR/slurmOUT
 
 # generate list of all slurm ids
 ls slurm-* | sed 's/slurm-//g' | sed 's/.out//g' > slurmIDs.txt
@@ -65,7 +67,7 @@ cat "$1"_"$2"_jobs.txt \
 module load R/3.3.0-foss-2016uofa
 
 # run Rscript to make scatterplot
-Rscript --vanilla $FASTDIR/scripts/plotJobStats.R "$1"_"$2"_jobs_nr.txt "$1"_"$2"_jobs.pdf
+Rscript --vanilla $FASTDIR/GITHUBrepos/handySLURMscripts/plotJobStats.R "$1"_"$2"_jobs_nr.txt "$1"_"$2"_jobs.pdf
 
 # move pdf (and txt summary) to plots
 mv "$1"_"$2"_jobs.pdf $FASTDIR/plots

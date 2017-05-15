@@ -1,0 +1,13 @@
+If just running a typical job (no array):
+#SBATCH -J KERMIT
+#SBATCH -o /fast/users/a1211880/slurmOUT/slurm-%j.out
+
+# this makes the job name KERMIT and output in the form of slurm-3211198.out, etc.
+
+
+
+If running a job with slurm arrays:
+#SBATCH -J KERMIT
+#SBATCH -o /fast/users/a1211880/slurmOUT/slurm-%A_%a.out
+
+# this makes the job name KERMIT, and slurm output of each array element slurm-3211198_0.out, slurm-3211198_1.out, and so on..

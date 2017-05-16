@@ -55,16 +55,29 @@ cat *_jobStats.txt > "$1"_"$2"_jobs.txt
 # e.g. convert HH:MM:SS to hrs
 # and convert memory from KB to GB
 cat "$1"_"$2"_jobs.txt \
-| grep batch \ # only grab the line which has time AND mem input of the job
-| awk '{sub(/\K$/,"",$4);print $0}' \ # remove "K" from the memory column
-| sed 's/1-/ONEdays /g' | sed 's/batch ONEdays/01:/g' \ # getaround for jobs that took over a day and have inconvenient format
-| sed 's/2-/TWOdays /g' | sed 's/batch TWOdays/02:/g' \ # ditto for jobs that took over two days
-| sed 's/3-/THREEdays /g' | sed 's/batch THREEdays/03:/g' \ # ditto for jobs that took over three days
-| sed 's/batch/00:/g' \ # jobs that took less than a day don't have a day field, so make one
-| awk '{print $1 "\t" $2$3 "\t" $4 "\t" $5}' \ # concatenate the day and HH:MM:SS fields
-| awk '{ split($2,a,":"); print $1 "\t" (a[1]*24) + a[2] + (a[3]*(60/3600)) + (a[4]/3600) "\t" $3/1000000 "\t" $4}' \ # convert time and mem column to hrs and gb, resp.
-| sed $'1 i\\\nJobID\tElapsedTimeHr\tMemUsedGB\tState' \ # add a header
+| grep batch \
+| awk '{sub(/\K$/,"",$4);print $0}' \
+| sed 's/1-/ONEdays /g' | sed 's/batch ONEdays/01:/g' \
+| sed 's/2-/TWOdays /g' | sed 's/batch TWOdays/02:/g' \
+| sed 's/3-/THREEdays /g' | sed 's/batch THREEdays/03:/g' \
+| sed 's/batch/00:/g' \
+| awk '{print $1 "\t" $2$3 "\t" $4 "\t" $5}' \
+| awk '{ split($2,a,":"); print $1 "\t" (a[1]*24) + a[2] + (a[3]*(60/3600)) + (a[4]/3600) "\t" $3/1000000 "\t" $4}' \
+| sed $'1 i\\\nJobID\tElapsedTimeHr\tMemUsedGB\tState' \
 > "$1"_"$2"_jobs_nr.txt
+
+# Explanation for the above bit of garbled mess:
+# first we grep batch, since this line holds both the time and mem info of the job
+# then remove "K" from the memory column
+# then we have to work around the fact that jobs may have diff time formats
+# e.g. D-HH:MM:SS versus HH:MM:SS
+# this is super inconvenient btw 
+# so we replace all 1-, 2-, 3- with a temp name
+# then concatenate it to HH:MM:SS as 01:,02:,03:
+# for jobs that took less than a day, we add 00: to the time col
+# this results in consistent time format of DD:HH:MM:SS
+# then we convert time and mem columns to hrs and gb, respectively
+# and add a header to finish it off (woo!)
 
 # module load R to generate scatterplot
 module load R/3.3.0-foss-2016uofa

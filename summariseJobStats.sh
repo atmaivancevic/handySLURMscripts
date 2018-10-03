@@ -16,7 +16,7 @@
 export FASTDIR=/fast/users/$USER
 
 # go to dir that stores all slurm*.out files
-cd $FASTDIR/slurmOUT
+cd ~/slurmOut/
 
 # generate list of all slurm ids
 ls slurm-* | sed 's/slurm-//g' | sed 's/.out//g' > slurmIDs.txt

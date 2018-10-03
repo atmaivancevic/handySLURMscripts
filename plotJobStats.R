@@ -17,14 +17,14 @@ if (length(args)==0) {
   args[2] = "output.pdf"
 }
 
-setwd("/fast/users/a1211880/jobStats/")
+setwd("/Users/ativ2716/jobStats/")
 pdf(file = args[2])
 data <- read.table(args[1], sep ="\t", header = T)
 title <- gsub(pattern = "_nr.txt",replacement = "", x = args[1])
 pdata <- plot(x = data$ElapsedTimeHr, y = data$MemUsedGB, main = title, xlab="Elapsed Time (hr)", ylab="Memory Used (gb)", xlim = range(pretty(c(0,max(data$ElapsedTimeHr)))), ylim = range(pretty(c(0,max(data$MemUsedGB)))))
 dev.off()
 
-setwd("/fast/users/a1211880/jobStats/")
+setwd("/Users/ativ2716/jobStats/")
 pdf(file = args[3])
 data <- read.table(args[1], sep ="\t", header = T)
 title <- gsub(pattern = "_nr.txt",replacement = "", x = args[1])

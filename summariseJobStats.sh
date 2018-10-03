@@ -1,22 +1,20 @@
 #!/bin/bash
 
 # Example usage:
-# ./summariseJobStats.sh BWA cpu
+# ./summariseJobStats.sh fastq short
 
 # Note: requires R and Rscript plotJobStats.R
 
 # Takes two command line arguments as input: process name and partition
 # Note: process name should be the first few unique characters of your process name
-# E.g. "BWA" is fine for BWA-GATKHPC
-# If you aren't sure which partition your jobs ran on, it was probably "cpu"
+# E.g. "fastq" is fine for fastq-QC
+# Parition is "short" or "long" depending on which queue you used
 # e.g. 
-# $1 = BWA
-# $2 = cpu
-
-export FASTDIR=/fast/users/$USER
+# $1 = fastq
+# $2 = short
 
 # go to dir that stores all slurm*.out files
-cd $FASTDIR/slurmOUT
+cd ~/slurmOut
 
 # generate list of all slurm ids
 ls slurm-* | sed 's/slurm-//g' | sed 's/.out//g' > slurmIDs.txt
@@ -30,8 +28,8 @@ do
 done
 
 # move to the jobs stats folder
-mv *_jobStats.txt $FASTDIR/jobStats/
-cd $FASTDIR/jobStats/
+mv *_jobStats.txt ~/jobStats/
+cd ~/jobStats/
 
 # only keep stats file if jobs have completed successfully
 # ie. delete stats for failed or currently running jobs 
@@ -39,12 +37,12 @@ find . -type f -exec grep -F -L 'COMPLETED' '{}' + \
 | xargs -d '\n' rm
 
 # narrow it down to jobs from a particular process
-# e.g. all BWA alignment jobs
+# e.g. all fastq quality control reports
 find . -type f -exec grep -F -L ''$1'' '{}' + \
 | xargs -d '\n' rm
 
 # and narrow it down to jobs run on a particular partition
-# e.g. cpu or highmem
+# e.g. short or long
 find . -type f -exec grep -F -L ''$2'' '{}' + \
 | xargs -d '\n' rm
 
@@ -82,16 +80,16 @@ cat "$1"_"$2"_jobs.txt \
 # and add a header to finish it off (woo!)
 
 # module load R to generate scatterplot
-module load R/3.3.0-foss-2016uofa
+module load R/3.3.0
 
 # run Rscript to make two scatterplots
 # first one: mem used vs elapsed wall time
 # second one: mem used vs cpu time
-Rscript --vanilla $FASTDIR/GITHUBrepos/handySLURMscripts/plotJobStats.R "$1"_"$2"_jobs_nr.txt "$1"_"$2"_jobs_MEMvsElapsedTime.pdf "$1"_"$2"_jobs_MEMvsCPUTime.pdf
+Rscript --vanilla ~/repos/handySLURMscripts/plotJobStats.R "$1"_"$2"_jobs_nr.txt "$1"_"$2"_jobs_MEMvsElapsedTime.pdf "$1"_"$2"_jobs_MEMvsCPUTime.pdf
 
 # move pdfs (and txt summary) to plots
-mv "$1"_"$2"_jobs_nr.txt $FASTDIR/plots
-mv "$1"_"$2"_jobs_*.pdf $FASTDIR/plots
+mv "$1"_"$2"_jobs_nr.txt ~/jobPlots
+mv "$1"_"$2"_jobs_*.pdf ~/jobPlots
 
 # clear the slate
-rm $FASTDIR/jobStats/*
+#rm ~/jobStats/*

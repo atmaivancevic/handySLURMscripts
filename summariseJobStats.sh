@@ -14,11 +14,7 @@
 # $2 = short
 
 # go to dir that stores all slurm*.out files
-<<<<<<< HEAD
 cd ~/slurmOut/
-=======
-cd ~/slurmOut
->>>>>>> 94f7618e9a29a5b36f125a879b0e7b8b000299e8
 
 # generate list of all slurm ids
 ls slurm-* | sed 's/slurm-//g' | sed 's/.out//g' > slurmIDs.txt

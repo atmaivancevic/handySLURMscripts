@@ -18,14 +18,14 @@ if (length(args)==0) {
 }
 
 setwd("/Users/ativ2716/jobStats/")
-png(file = args[2])
+png(file = args[2], type="cairo")
 data <- read.table(args[1], sep ="\t", header = T)
 title <- gsub(pattern = "_nr.txt",replacement = "", x = args[1])
 pdata <- plot(x = data$ElapsedTimeHr, y = data$MemUsedGB, main = title, xlab="Elapsed Time (hr)", ylab="Memory Used (gb)", xlim = range(pretty(c(0,max(data$ElapsedTimeHr)))), ylim = range(pretty(c(0,max(data$MemUsedGB)))))
 dev.off()
 
 setwd("/Users/ativ2716/jobStats/")
-png(file = args[3])
+png(file = args[3], type="cairo")
 data <- read.table(args[1], sep ="\t", header = T)
 title <- gsub(pattern = "_nr.txt",replacement = "", x = args[1])
 pdata <- plot(x = data$CPUTimeHr, y = data$MemUsedGB, main = title, xlab="CPU Time (hr)", ylab="Memory Used (gb)", xlim = range(pretty(c(0,max(data$CPUTimeHr)))), ylim = range(pretty(c(0,max(data$MemUsedGB)))))

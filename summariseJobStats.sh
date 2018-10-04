@@ -23,7 +23,6 @@ slurmIDList=$(cat slurmIDs.txt)
 # generate job stats for each job 
 for i in $slurmIDList;
 do
-	echo $i
 	sacct --format="JobID,JobName,Partition,Elapsed,MaxRSS,UserCPU,State" -j $i > "$i"_jobStats.txt
 done
 

@@ -85,11 +85,11 @@ module load R/3.3.0
 # run Rscript to make two scatterplots
 # first one: mem used vs elapsed wall time
 # second one: mem used vs cpu time
-Rscript --vanilla ~/repos/handySLURMscripts/plotJobStats.R "$1"_"$2"_jobs_nr.txt "$1"_"$2"_jobs_MEMvsElapsedTime.pdf "$1"_"$2"_jobs_MEMvsCPUTime.pdf
+Rscript --vanilla ~/repos/handySLURMscripts/plotJobStats.R "$1"_"$2"_jobs_nr.txt "$1"_"$2"_jobs_MEMvsElapsedTime.png "$1"_"$2"_jobs_MEMvsCPUTime.png
 
-# move pdfs (and txt summary) to plots
+# move pngs (and txt summary) to plots dir
 mv "$1"_"$2"_jobs_nr.txt ~/jobPlots
-mv "$1"_"$2"_jobs_*.pdf ~/jobPlots
+mv "$1"_"$2"_jobs_*.png ~/jobPlots
 
 # clear the slate
-#rm ~/jobStats/*
+rm ~/jobStats/*
